@@ -1,15 +1,34 @@
+# ✨ adimlar
 
-start db
+- Docker yuklediginden emin ol
+- projeyi klonla `git clone https://github.com/ethsmaa/restaurant-management`
+- proje dizinine git `cd restaurant-management`
+- Bagimlikliklari yukle
+    `yarn install`
+- database i baslatmak icin database servisin ayaga kaldir
+    `docker compose up -d`
+- database migrationlarini uygula
+    `yarn migrate`
+- uygulamayi baslat
+    `yarn dev`
+
+> Not: Bir nedenden dolayi db in icine edersen bu komutla sifirlayabilirsin.
+    ```
+    docker compose down -v && docker compose up -d
+    ``` 
+
+Databasei goruntulemek icin istersen Dbeaver i kullanabilirssin. indirmek icin
+```
+brew install --cask dbeaver-community
+```
+
+DBeaver adli uygulama yuklenecktir. Sonrasinda yeni bir mysql baglantisi ekle ve url kismina
 
 ```
-docker compose up -d
+jdbc:mysql://localhost:3306?allowPublicKeyRetrieval=true&useSSL=false
 ```
 
-DB URL: jdbc:mysql://localhost:3306?allowPublicKeyRetrieval=true&useSSL=false
+yazarak baglanabilrisin
 
 
-to delete db
 
-```
-docker compose down -v
-```
