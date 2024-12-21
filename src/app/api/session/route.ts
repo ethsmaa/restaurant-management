@@ -1,4 +1,4 @@
-import { defaultSession, getSession, Session, sessionOptions } from "~/lib/session";
+import { defaultSession, getSession} from "~/lib/session";
 
 export async function GET() {
   const session = await getSession();

@@ -1,10 +1,11 @@
 import { getIronSession, type SessionOptions } from "iron-session";
+import type { UserRole } from "./enums/roles";
 
 export type Session = {
   user: {
     id: number;
     name: string;
-    role: "customer" | "restaurant_owner" | "admin";
+    role: UserRole;
   } | null;
 };
 
