@@ -4,7 +4,7 @@ import type { RowDataPacket } from "mysql2";
 
 import type { Restaurant } from "~/lib/types/restaurant";
 import { UserRole } from "~/lib/enums/roles";
-
+import { MenuItem } from "~/lib/types/menuItem";
 /*
  * Restoranları veritabanından çeker.
  * Sadece restoran sahipleri bu fonksiyonu kullanabilir.
@@ -57,5 +57,37 @@ export async function addRestaurant(
   }
 }
 
-// Todo: deleteRestaurant fonksiyonunu ekle 
-// Todo: updateRestaurant fonksiyonunu ekle
+
+export async function fetchRestaurantById(restaurantId: number): Promise<Restaurant | null> {
+  const db = await getConnection();
+
+  try {
+    const [results] = await db.query<(Restaurant & RowDataPacket)[]>(
+      "SELECT restaurant_id, name, address, phone FROM Restaurants WHERE restaurant_id = ?",
+      [restaurantId],
+    );
+
+    return results.length > 0 ? (results[0] ?? null) : null;
+  } catch (error) {
+    console.error("Restoran bilgisi alınırken hata oluştu:", error);
+    return null;
+  }
+}
+
+
+export async function fetchMenuItems(restaurantId: number): Promise<MenuItem[]> {
+  const db = await getConnection();
+
+  try {
+    const [results] = await db.query<(MenuItem & RowDataPacket)[]>(
+      "SELECT item_id, name, description, price, category, image_url FROM Items WHERE restaurant_id = ?",
+      [restaurantId],
+    );
+
+    return results;
+  } catch (error) {
+    console.error("Menü öğeleri alınırken hata oluştu:", error);
+    return [];
+  }
+}
+
