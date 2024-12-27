@@ -16,3 +16,4 @@ export async function POST(request: Request) {
     return NextResponse.redirect(new URL("/dashboard/owner/add?error=Bir hata oluştu", request.url));
   }
 }
+

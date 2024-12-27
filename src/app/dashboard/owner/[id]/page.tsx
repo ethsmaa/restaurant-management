@@ -1,42 +1,56 @@
-import { UserRole } from "~/lib/enums/roles";
-import { getSession } from "~/lib/session";
+import { fetchRestaurantById } from "~/services/restaurants";
+import { fetchMenuItems } from "~/services/menuItems";
+import { type Restaurant } from "~/lib/types/restaurant";
+import { type MenuItem } from "~/lib/types/menuItem";
+import { notFound } from "next/navigation";
 
-export default async function AddItemPage() {
-  const { user } = await getSession();
+// async oldugunda paramsi boyle al!!!
+interface RestaurantDetailsProps {
+  params: { id: string };
+}
 
-  if (!user || user.role !== UserRole.OWNER) {
-    return (
-      <p>Yetkisiz erişim. Burayi gormek icin restoran sahibi olmalisiniz.</p>
-    );
+export default async function RestaurantDetails({ params }: RestaurantDetailsProps) {
+  const restaurantId = Number(params?.id);
+
+  if (isNaN(restaurantId)) {
+    throw new Error("Geçersiz restoran ID'si");
   }
 
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
-      <form
-        action="/api/restaurants"
-        method="post"
-        className="flex flex-col gap-4 rounded-lg p-4 shadow-lg"
-      >
-        <label>
-          <span>Item Adi</span>
-          <input className="text-black" type="text" name="name" required />
-        </label>
-        <label>
-          <span>Adres</span>
-          <input className="text-black" type="text" name="address" required />
-        </label>
-        <label>
-          <span>Telefon No</span>
-          <input className="text-black" type="string" name="phone" required />
-        </label>
 
-        <button
-          type="submit"
-          className="mt-4 rounded bg-blue-500 p-2 hover:bg-blue-700"
-        >
-          Ekle
-        </button>
-      </form>
-    </main>
+  const restaurant: Restaurant | null = await fetchRestaurantById(restaurantId);
+  if (!restaurant) {
+    notFound();
+  }
+
+  // restoranin menu ogelerini cek
+  const menuItems: MenuItem[] = await fetchMenuItems(restaurantId);
+
+  return (
+    <div>
+      <h1>{restaurant.name}</h1>
+      <p>Adres: {restaurant.address}</p>
+      <p>Telefon: {restaurant.phone}</p>
+
+      <h2>Menü</h2>
+      {menuItems.length === 0 ? (
+        <p>Bu restoran için henüz menü öğesi eklenmemiş.</p>
+      ) : (
+        <ul>
+          {menuItems.map((item) => (
+            <li key={item.item_id}>
+              {item.name} - {item.price} TL
+            </li>
+          ))}
+        </ul>
+      )}
+      <a href={`/dashboard/owner/${restaurant.restaurant_id}/addItem`}>
+        <button>Menune yeni bir yemek ekle!</button>
+      </a>
+      <br />
+      <a href={`/dashboard/owner/${restaurant.restaurant_id}/orders`}>
+        <button>Siparişleri görüntüle</button>
+      </a>
+
+    </div>
   );
 }

@@ -15,34 +15,33 @@ export async function POST(request: Request) {
 
   const db = await getConnection();
 
-  // Kullanıcıyı veritabanına ekle
-  await db.query(
-    "INSERT INTO Users (name, email, password, role) VALUES (?, ?, ?, ?)",
-    [name, email, password, role]
-  );
+  try {
+    // Kullanıcıyı veritabanına ekle
+    await db.query(
+      "INSERT INTO Users (name, email, password, role) VALUES (?, ?, ?, ?)",
+      [name, email, password, role]
+    );
 
-  // Session başlat ve cookie'den oku
-  const session = await getSession();
+    // Eklenen kullanıcıyı çek
+    const [rows] = await db.query<(User & RowDataPacket)[]>(
+      "SELECT * FROM Users WHERE name = ?",
+      [name]
+    );
 
-  // Eklenen kullanıcıyı çek
-  const [rows] = await db.query<(User & RowDataPacket)[]>(
-    "SELECT * FROM Users WHERE name = ?",
-    [name]
-  );
+    if (rows.length > 0) {
+      const dbUser = rows[0]!;
 
-  if (rows.length > 0) {
-    const dbUser = rows[0]!;
+      const session = await getSession();
+      session.user = {
+        id: dbUser.user_id,
+        name: dbUser.name,
+        role: dbUser.role,
+      };
 
-    session.user = {
-      id: dbUser.user_id,
-      name: dbUser.name,
-      role: dbUser.role,
-    };
+      await session.save();
 
-    await session.save();
-
-    // Rolüne göre yönlendir
-    let redirectURL = "/";
+      // Rolüne göre yönlendir
+      let redirectURL = "/";
       if (dbUser.role === UserRole.CUSTOMER) {
         redirectURL = "/dashboard/customer";
       } else if (dbUser.role === UserRole.OWNER) {
@@ -50,9 +49,27 @@ export async function POST(request: Request) {
       } else if (dbUser.role === UserRole.ADMIN) {
         redirectURL = "/sadece-admin";
       }
-      
 
-    return Response.redirect(new URL(redirectURL, request.url), 303);
+      return Response.redirect(new URL(redirectURL, request.url), 303);
+    }
+  } catch (error: unknown) {
+    // Duplicate email hatasını kontrol et
+    if (
+      error instanceof Error &&
+      error.message.includes("Duplicate entry")
+    ) {
+      return Response.redirect(
+        new URL("/register?error=email_exists", request.url),
+        303
+      );
+    }
+
+    // Diğer hatalar
+    console.error("Hata oluştu:", error);
+    return Response.redirect(
+      new URL("/register?error=unknown_error", request.url),
+      303
+    );
   }
 
   return Response.redirect(new URL("/register", request.url), 303);

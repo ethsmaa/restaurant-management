@@ -4,33 +4,35 @@ import type { RowDataPacket } from "mysql2";
 
 import type { Restaurant } from "~/lib/types/restaurant";
 import { UserRole } from "~/lib/enums/roles";
-import { MenuItem } from "~/lib/types/menuItem";
-/*
- * Restoranları veritabanından çeker.
- * Sadece restoran sahipleri bu fonksiyonu kullanabilir.
- */
 
+/**
+ * Veritabanından restoranları çeker.
+ * Sadece restoran sahipleri bu fonksiyonu kullanabilir.
+ * @returns {Promise<Restaurant[]>} Restoranların listesi.
+ */
 export async function fetchRestaurants(): Promise<Restaurant[]> {
   const session = await getSession();
 
-  if (!session.user || session.user.role !== UserRole.OWNER) {
+  if (!session?.user || session.user.role !== UserRole.OWNER) {
     throw new Error("Yetkisiz erişim");
   }
 
-  // Restoranları veritabanından çek
   const db = await getConnection();
   const [restaurants] = await db.query<(Restaurant & RowDataPacket)[]>(
     "SELECT restaurant_id, name, address, phone FROM Restaurants WHERE owner_id = ?",
     [session.user.id],
   );
 
-  return restaurants;
+  return restaurants as Restaurant[];
 }
 
-/*
-  * Yeni bir restoran ekler.
-  * Sadece restoran sahipleri bu fonksiyonu kullanabilir.
-  */
+/**
+ * Yeni bir restoran ekler.
+ * Sadece restoran sahipleri bu fonksiyonu kullanabilir.
+ * @param {string} name - Restoran adı.
+ * @param {string} address - Restoran adresi.
+ * @param {string} phone - Restoran telefon numarası.
+ */
 export async function addRestaurant(
   name: string,
   address: string,
@@ -38,26 +40,32 @@ export async function addRestaurant(
 ): Promise<void> {
   const session = await getSession();
 
-  if (!session.user || session.user.role !== UserRole.OWNER) {
+  if (!session?.user || session.user.role !== UserRole.OWNER) {
     throw new Error("Yetkisiz erişim");
   }
 
-  // Veritabanı bağlantısını al
   const db = await getConnection();
 
   try {
-    // Restoranı veritabanına ekle
     await db.query(
       "INSERT INTO Restaurants (owner_id, name, address, phone) VALUES (?, ?, ?, ?)",
       [session.user.id, name, address, phone],
     );
-  } catch (error) {
-    console.error("Restoran ekleme hatası:", error);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error("Restoran ekleme hatası:", error.message);
+    } else {
+      console.error("Bilinmeyen bir hata oluştu:", error);
+    }
     throw new Error("Restoran eklenirken bir hata oluştu.");
   }
 }
 
-
+/**
+ * Belirtilen ID ile restoran bilgilerini alır.
+ * @param {number} restaurantId - Restoran ID'si.
+ * @returns {Promise<Restaurant | null>} Restoran bilgileri veya null.
+ */
 export async function fetchRestaurantById(restaurantId: number): Promise<Restaurant | null> {
   const db = await getConnection();
 
@@ -67,27 +75,23 @@ export async function fetchRestaurantById(restaurantId: number): Promise<Restaur
       [restaurantId],
     );
 
-    return results.length > 0 ? (results[0] ?? null) : null;
-  } catch (error) {
-    console.error("Restoran bilgisi alınırken hata oluştu:", error);
+    return results.length > 0 ? (results[0] as Restaurant) : null;
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error("Restoran bilgisi alınırken hata oluştu:", error.message);
+    } else {
+      console.error("Bilinmeyen bir hata oluştu:", error);
+    }
     return null;
   }
 }
 
 
-export async function fetchMenuItems(restaurantId: number): Promise<MenuItem[]> {
+export async function fetchAllRestaurants(): Promise<Restaurant[]> {
   const db = await getConnection();
+  const [restaurants] = await db.query<(Restaurant & RowDataPacket)[]>(
+    "SELECT restaurant_id, name, address, phone FROM Restaurants",
+  );
 
-  try {
-    const [results] = await db.query<(MenuItem & RowDataPacket)[]>(
-      "SELECT item_id, name, description, price, category, image_url FROM Items WHERE restaurant_id = ?",
-      [restaurantId],
-    );
-
-    return results;
-  } catch (error) {
-    console.error("Menü öğeleri alınırken hata oluştu:", error);
-    return [];
-  }
+  return restaurants as Restaurant[];
 }
-

@@ -1,5 +1,6 @@
 // server side component async calisiyo 
 // burada api methdolarina gerekm yok dogrudan fetchRestaurants kullaniyoruz.
+import Link from "next/link";
 import { fetchRestaurants } from "~/services/restaurants";
 
 export default async function OwnerDashboard() {
@@ -13,9 +14,9 @@ export default async function OwnerDashboard() {
         {restaurants.length === 0 ? (
           <div>
             <p>Henüz bir restoranınız yok. Yeni bir restoran eklemek için aşağıdaki butona tıklayın.</p>
-            <a href="/dashboard/owner/add">
+            <Link href="/dashboard/owner/add">
               <button>Yeni Restoran Ekle</button>
-            </a>
+            </Link>
           </div>
         ) : (
           <div>
@@ -28,9 +29,9 @@ export default async function OwnerDashboard() {
                 </li>
               ))}
             </ul>
-            <a href="/dashboard/owner/add">
+            <Link href="/dashboard/owner/add">
               <button>Yeni Restoran Ekle</button>
-            </a>
+            </Link>
           </div>
         )}
       </div>
