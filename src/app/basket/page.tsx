@@ -8,6 +8,7 @@ export default function BasketPage() {
   const [basket, setBasket] = useState<BasketItem[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // sayfa ilk yuklendiginde sepeti yukle
   useEffect(() => {
     // Async işlemi handle eden bir iç fonksiyon
     const loadBasket = async () => {
@@ -22,7 +23,7 @@ export default function BasketPage() {
       }
     };
 
-    // Async işlemi çağırırken `void` operatörü kullanarak eslint uyarısını engelleriz
+    // eslint async isleme uyari veriyor diye ignore (void yazarak)
     void loadBasket();
   }, []);
 
@@ -69,3 +70,7 @@ export default function BasketPage() {
     </div>
   );
 }
+
+/**
+ * todo: sepetteki urunleri componente cevir
+ */

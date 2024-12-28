@@ -10,8 +10,10 @@ export async function POST(request: Request) {
     session.cart = [];
   }
 
+  // Check if the item is already in the cart
   const existingItem = session.cart.find((item) => item.item_id === item_id);
 
+  // eger varsa quantity'i arttır
   if (existingItem) {
     existingItem.quantity += 1;
   } else {

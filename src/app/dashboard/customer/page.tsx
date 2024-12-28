@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { fetchAllRestaurants } from "~/services/restaurants";
 
 export default async function CustomerDashboard() {
@@ -16,6 +17,13 @@ export default async function CustomerDashboard() {
             </li>
             ))}
         </ul>
+
+
+        <Link href="/dashboard/customer/account">
+            <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">
+            Hesabım
+            </button>
+        </Link>
         </div>
     );
     }

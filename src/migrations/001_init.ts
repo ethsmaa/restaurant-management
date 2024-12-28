@@ -53,8 +53,21 @@ const migrations = [
         FOREIGN KEY (item_id) REFERENCES Items(item_id)
             ON DELETE CASCADE
       );`,
+
+      `CREATE TABLE if not exists Addresses (
+        address_id INT AUTO_INCREMENT PRIMARY KEY,
+        user_id INT NOT NULL,
+        address_title VARCHAR(100) NOT NULL,
+        address_line TEXT NOT NULL,
+        city VARCHAR(100) NOT NULL,
+        is_default BOOLEAN DEFAULT FALSE,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        FOREIGN KEY (user_id) REFERENCES Users(user_id)
+            ON DELETE CASCADE
+      );`,
   
-    // Admin kullanıcı ekleme
+      // Admin kullanıcı ekleme
     `INSERT INTO Users (name, email, password, role) VALUES ('admin', 'admin@admin.com', 'admin', 'admin');`
   ];
   
