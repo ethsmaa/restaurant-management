@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useEffect, useState } from "react";
-import { fetchBasket, removeFromBasket, type BasketItem } from "~/services/basket";
+import { fetchBasket, removeFromBasket } from "~/services/basket";
+import type { BasketItem } from "~/lib/types/basketItem";
 
 export default function BasketPage() {
   const [basket, setBasket] = useState<BasketItem[]>([]);
