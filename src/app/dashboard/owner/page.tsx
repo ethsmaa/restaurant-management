@@ -2,6 +2,7 @@
 // burada api methdolarina gerekm yok dogrudan fetchRestaurants kullaniyoruz.
 import Link from "next/link";
 import { fetchRestaurants } from "~/services/restaurants";
+import { Logout } from "~/components/Logout";
 
 export default async function OwnerDashboard() {
   try {
@@ -29,9 +30,15 @@ export default async function OwnerDashboard() {
                 </li>
               ))}
             </ul>
+        
             <Link href="/dashboard/owner/add">
               <button>Yeni Restoran Ekle</button>
             </Link>
+
+            <br />
+            <br />
+
+            <Logout />
           </div>
         )}
       </div>

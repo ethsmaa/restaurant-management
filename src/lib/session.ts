@@ -7,7 +7,14 @@ export type Session = {
     name: string;
     role: UserRole;
   } | null;
+  cart?: {
+    item_id: number;
+    name: string;
+    price: number;
+    quantity: number;
+  }[];
 };
+
 
 export const defaultSession: Session = {
   user: null,

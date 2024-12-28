@@ -1,5 +1,4 @@
 
-import Link from "next/link";
 import { LoginOrLogout } from "~/components/LoginOrLogout";
 import { Register } from "~/components/Register";
 import { getSession } from "~/lib/session";
