@@ -62,3 +62,7 @@ export default async function CustomerRestaurantPage({ params }: RestaurantPageP
     </div>
   );
 }
+
+/**
+ * todo:menu itemlerini component olarak ayirin
+ */
