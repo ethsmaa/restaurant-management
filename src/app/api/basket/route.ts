@@ -3,6 +3,7 @@ import type { BasketItem } from "~/lib/types/basketItem";
 
 export async function POST(request: Request) {
   const session = await getSession();
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const { item_id, name, price}: BasketItem = await request.json();
 
   if (!session.cart) {
@@ -38,7 +39,7 @@ export async function DELETE(request: Request) {
 
 export async function GET() {
   const session = await getSession();
-  return new Response(JSON.stringify(session.cart || []), {
+  return new Response(JSON.stringify(session.cart ?? []), {
     headers: { "Content-Type": "application/json" },
     status: 200,
   });
