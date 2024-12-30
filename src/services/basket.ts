@@ -32,7 +32,7 @@ export async function addToBasket(
 }
 
 // Sepetten ürün kaldır
-export async function removeFromBasket(item_id: number): Promise<void> {
+export async function removeFromBasket(item_id: number): Promise<Response> {
   const response = await fetch(`/api/basket?item_id=${item_id}`, {
     method: "DELETE",
   });
@@ -40,4 +40,6 @@ export async function removeFromBasket(item_id: number): Promise<void> {
   if (!response.ok) {
     throw new Error("Failed to remove item from basket");
   }
+
+  return response;
 }

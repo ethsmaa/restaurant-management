@@ -5,3 +5,5 @@ export type Restaurant = {
     phone: string;
   };
   
+
+  export type RestaurantUpdate = Pick<Restaurant, "name" | "address" | "phone">;

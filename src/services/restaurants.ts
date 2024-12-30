@@ -95,3 +95,36 @@ export async function fetchAllRestaurants(): Promise<Restaurant[]> {
 
   return restaurants as Restaurant[];
 }
+
+
+/**
+ * Restoran bilgilerini günceller.
+ * @param {number} restaurantId - Güncellenecek restoranın ID'si.
+ * @param {string} name - Yeni restoran adı.
+ * @param {string} address - Yeni adres.
+ * @param {string} phone - Yeni telefon numarası.
+ */
+export async function updateRestaurant(
+  restaurantId: number,
+  name: string,
+  address: string,
+  phone: string,
+): Promise<void> {
+  const db = await getConnection();
+
+  try {
+    await db.query(
+      "UPDATE Restaurants SET name = ?, address = ?, phone = ? WHERE restaurant_id = ?",
+      [name, address, phone, restaurantId],
+    );
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error("Restoran güncelleme hatası:", error.message);
+    } else {
+      console.error("Bilinmeyen bir hata oluştu:", error);
+    }
+    throw new Error("Restoran güncellenirken bir hata oluştu.");
+  }
+}
+
+

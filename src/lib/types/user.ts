@@ -7,3 +7,6 @@ export type User = {
   email: string;
   role: UserRole;
 };
+
+
+export type EditableUser = Pick<User, "name" | "email" | "password">;

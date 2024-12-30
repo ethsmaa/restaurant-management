@@ -45,6 +45,24 @@ export default function BasketAndPaymentPage() {
     void loadDefaultAddress();
   }, []);
 
+  const handleRemoveFromBasket = async (itemId: number) => {
+    try {
+      const response = await removeFromBasket(itemId);
+  
+      if (response.ok) {
+        // Sepetten öğeyi kaldır ve durumu güncelle
+        setBasket((prevBasket) =>
+          prevBasket.filter((item) => item.item_id !== itemId)
+        );
+      } else {
+        alert("Failed to remove item from basket.");
+      }   
+    } catch (error) {
+      console.error("Error removing item from basket:", error);
+      alert("Failed to remove item from basket.");
+    }
+  };
+
   const handlePlaceOrder = async () => {
     try {
       const response = await fetch("/api/orders", { method: "POST" });
@@ -81,7 +99,7 @@ export default function BasketAndPaymentPage() {
                 <h3>{item.name}</h3>
                 <p>Price: ${item.price}</p>
                 <p>Quantity: {item.quantity}</p>
-                <button onClick={() => void removeFromBasket(item.item_id)}>
+                <button onClick={() => void handleRemoveFromBasket(item.item_id)}>
                   Remove
                 </button>
               </li>
@@ -108,11 +126,10 @@ export default function BasketAndPaymentPage() {
       <button
         onClick={handlePlaceOrder}
         disabled={basket.length === 0 || !defaultAddress}
-        className={`p-2 rounded ${
-          basket.length > 0 && defaultAddress
+        className={`p-2 rounded ${basket.length > 0 && defaultAddress
             ? "bg-green-500 text-white hover:bg-green-700"
             : "bg-gray-500 text-gray-300 cursor-not-allowed"
-        }`}
+          }`}
       >
         Place Order
       </button>

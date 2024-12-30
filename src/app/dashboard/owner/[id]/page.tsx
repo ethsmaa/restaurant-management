@@ -51,6 +51,13 @@ export default async function RestaurantDetails({ params }: RestaurantDetailsPro
         <button>Siparişleri görüntüle</button>
       </a>
 
+
+      <br />
+      <br />
+
+      <a href={`/dashboard/owner/${restaurant.restaurant_id}/edit`}>
+        <button>Restoran Bilgilerini Düzenle</button>
+      </a>
     </div>
   );
 }
