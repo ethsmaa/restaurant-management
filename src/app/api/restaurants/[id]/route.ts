@@ -1,4 +1,4 @@
-import { updateRestaurant, fetchRestaurantById } from "~/services/restaurants";
+import { updateRestaurant, fetchRestaurantById, deleteRestaurant } from "~/services/restaurants";
 import { NextResponse } from "next/server";
 import type {  RestaurantUpdate } from "~/lib/types/restaurant";
 
@@ -63,6 +63,31 @@ export async function GET(
     console.error("Restoran bilgisi alınırken hata oluştu:", error);
     return NextResponse.json(
       { error: "Restoran bilgisi alınamadı." },
+      { status: 500 },
+    );
+  }
+}
+
+export async function DELETE(
+  request: Request,
+  { params }: { params: { id: string } },
+) {
+  const restaurantId = Number(params.id);
+
+  if (isNaN(restaurantId)) {
+    return NextResponse.json(
+      { error: "Geçersiz restoran ID'si" },
+      { status: 400 },
+    );
+  }
+
+  try {
+    await deleteRestaurant(restaurantId);
+    return NextResponse.json({ message: "Restoran başarıyla silindi." });
+  } catch (error) {
+    console.error("Restoran silme hatası:", error);
+    return NextResponse.json(
+      { error: "Restoran silinemedi." },
       { status: 500 },
     );
   }

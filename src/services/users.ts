@@ -55,3 +55,22 @@ export async function updateUser(updatedData: Partial<User>): Promise<void> {
     );
   }
 }
+
+
+/**
+ * kullanıcıyı siler
+ * @returns {Promise<void>}
+ * 
+ */
+
+export async function deleteUser(): Promise<void> {
+  const session = await getSession();
+
+  if (!session.user) {
+    throw new Error("Unauthorized");
+  }
+
+  const db = await getConnection();
+  await db.query("DELETE FROM Users WHERE user_id = ?", [session.user.id]);
+  
+}

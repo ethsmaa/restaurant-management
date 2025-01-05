@@ -128,3 +128,23 @@ export async function updateRestaurant(
 }
 
 
+
+/**
+ * Restoranı siler.
+ * @param {number} restaurantId - Silinecek restoranın ID'si.
+ * @returns {Promise<void>}
+ */
+export async function deleteRestaurant(restaurantId: number): Promise<void> {
+  const db = await getConnection();
+
+  try {
+    await db.query("DELETE FROM Restaurants WHERE restaurant_id = ?", [restaurantId]);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error("Restoran silme hatası:", error.message);
+    } else {
+      console.error("Bilinmeyen bir hata oluştu:", error);
+    }
+    throw new Error("Restoran silinirken bir hata oluştu.");
+  }
+}

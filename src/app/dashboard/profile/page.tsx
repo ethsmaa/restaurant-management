@@ -1,9 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import type { EditableUser} from "~/lib/types/user"; // User tipini içeri aktar
-
-// User'dan sadece gerekli alanları seçiyoruz
+import type { EditableUser } from "~/lib/types/user"; // User tipini içeri aktar
 
 export default function ProfilePage() {
   const [user, setUser] = useState<EditableUser>({ name: "", email: "", password: "" });
@@ -12,7 +10,6 @@ export default function ProfilePage() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    // Kullanıcı bilgilerini yükle
     const fetchUser = async () => {
       try {
         const response = await fetch("/api/profile", { method: "GET" });
@@ -20,7 +17,7 @@ export default function ProfilePage() {
           throw new Error("Failed to fetch user data");
         }
         const data: EditableUser = await response.json() as EditableUser;
-        setUser({ ...data, password: "" }); // Şifreyi boş bırakıyoruz
+        setUser({ ...data, password: "" });
         setLoading(false);
       } catch (error) {
         console.error(error);
@@ -62,6 +59,32 @@ export default function ProfilePage() {
     }
   };
 
+  const handleDelete = async () => {
+    if (confirm("Hesabınızı silmek istediğinize emin misiniz?")) {
+      setSuccessMessage(null);
+      setErrorMessage(null);
+
+      try {
+        const response = await fetch("/api/profile", {
+          method: "DELETE",
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to delete profile");
+        }
+
+        setSuccessMessage("Hesap başarıyla silindi.");
+        setUser({ name: "", email: "", password: "" });
+
+        window.location.href = "/login";
+
+      } catch (error) {
+        console.error("Error deleting profile:", error);
+        setErrorMessage("Hesap silinirken hata oluştu.");
+      }
+    }
+  };
+
   if (loading) {
     return <p>Yükleniyor...</p>;
   }
@@ -70,12 +93,8 @@ export default function ProfilePage() {
     <div className="max-w-md mx-auto mt-10">
       <h1 className="text-2xl font-bold mb-4">Profilimi Güncelle</h1>
 
-      {successMessage && (
-        <p className="text-green-600 mb-4">{successMessage}</p>
-      )}
-      {errorMessage && (
-        <p className="text-red-600 mb-4">{errorMessage}</p>
-      )}
+      {successMessage && <p className="text-green-600 mb-4">{successMessage}</p>}
+      {errorMessage && <p className="text-red-600 mb-4">{errorMessage}</p>}
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <label>
@@ -118,6 +137,13 @@ export default function ProfilePage() {
           Güncelle
         </button>
       </form>
+
+      <button
+        onClick={handleDelete}
+        className="w-full bg-red-500 text-white p-2 rounded hover:bg-red-700 mt-4"
+      >
+        Hesabı Sil
+      </button>
     </div>
   );
 }

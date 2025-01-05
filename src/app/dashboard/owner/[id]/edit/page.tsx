@@ -1,11 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import type { Restaurant } from "~/lib/types/restaurant"; // Restaurant tipini içeri aktar
 
 export default function EditRestaurantPage() {
     const params = useParams();
+    const router = useRouter();
     const restaurantId = Number(params.id);
 
     const [restaurant, setRestaurant] = useState<Restaurant>({
@@ -79,6 +80,29 @@ export default function EditRestaurantPage() {
         }
     };
 
+    const handleDelete = async () => {
+        if (confirm("Bu restoranı silmek istediğinize emin misiniz?")) {
+            setSuccessMessage(null);
+            setErrorMessage(null);
+
+            try {
+                const response = await fetch(`/api/restaurants/${restaurantId}`, {
+                    method: "DELETE",
+                });
+
+                if (!response.ok) {
+                    throw new Error("Failed to delete restaurant");
+                }
+
+                setSuccessMessage("Restoran başarıyla silindi.");
+                router.push("/dashboard/owner"); 
+            } catch (error) {
+                console.error("Error deleting restaurant:", error);
+                setErrorMessage("Restoran silinirken hata oluştu.");
+            }
+        }
+    };
+
     if (loading) {
         return <p>Yükleniyor...</p>;
     }
@@ -136,6 +160,13 @@ export default function EditRestaurantPage() {
                     Güncelle
                 </button>
             </form>
+
+            <button
+                onClick={handleDelete}
+                className="mt-4 bg-red-500 text-white p-2 rounded hover:bg-red-700"
+            >
+                Restoranı Sil
+            </button>
 
             <a href={`/dashboard/owner/${restaurantId}`}>
                 <button className="mt-4 bg-blue-500 text-white p-2 rounded hover:bg-blue-700">
