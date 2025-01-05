@@ -1,6 +1,7 @@
 import { fetchUser, updateUser, deleteUser } from "~/services/users";
 import { NextResponse } from "next/server";
 import { getSession } from "~/lib/session";
+import type { User } from "~/lib/types/user";
 
 // Kullanıcı bilgilerini getir (GET)
 export async function GET() {
@@ -24,7 +25,7 @@ export async function GET() {
 // Kullanıcı bilgilerini güncelle (PATCH)
 export async function PATCH(request: Request) {
   try {
-    const updatedData = await request.json();
+    const updatedData: Partial<User> = await request.json() as Partial<User>;
     await updateUser(updatedData);
 
     return NextResponse.json(

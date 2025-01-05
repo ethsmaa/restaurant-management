@@ -1,5 +1,14 @@
+import { getSession } from "~/lib/session";
 
-export default function LoginPage() {
+export default async function LoginPage() {
+
+    const session = await getSession();
+
+    if (session.user) {
+        return <div>Already logged in</div>;
+    }
+    
+
     return (
         <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
             <form

@@ -54,6 +54,10 @@ export async function updateUser(updatedData: Partial<User>): Promise<void> {
       [name, email, session.user.id]
     );
   }
+
+  session.user = { ...session.user, name };
+  await session.save();
+
 }
 
 

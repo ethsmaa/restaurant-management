@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Logout } from "~/components/Logout";
 
 export default function AccountPage() {
     return (
@@ -27,6 +28,8 @@ export default function AccountPage() {
                 </button>
             </Link>
 
+
+            <Logout />
         </div>
 
 

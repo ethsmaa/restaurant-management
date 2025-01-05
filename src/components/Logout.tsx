@@ -9,7 +9,7 @@ export const Logout = () => {
     <button
       onClick={async () => {
         await fetch('/api/logout', { method: 'POST' })
-        window.location.reload()
+        window.location.href = '/' // geri basa don
       }}
     >
       Logout {session.user?.name}

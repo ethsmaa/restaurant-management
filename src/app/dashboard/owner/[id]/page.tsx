@@ -3,6 +3,7 @@ import { fetchMenuItems } from "~/services/menuItems";
 import { type Restaurant } from "~/lib/types/restaurant";
 import { type MenuItem } from "~/lib/types/menuItem";
 import { notFound } from "next/navigation";
+import Link from "next/link";
 
 // async oldugunda paramsi boyle al!!!
 interface RestaurantDetailsProps {
@@ -37,12 +38,25 @@ export default async function RestaurantDetails({ params }: RestaurantDetailsPro
       ) : (
         <ul>
           {menuItems.map((item) => (
+
             <li key={item.item_id}>
               {item.name} - {item.price} TL
+              <Link href={`${item.restaurant_id}/menuItems/${item.item_id}`}>
+                <button className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-700">
+                  Detaylar
+  
+                </button>
+              </Link >
             </li>
+
+
+
+
+
           ))}
         </ul>
-      )}
+      )
+      }
       <a href={`/dashboard/owner/${restaurant.restaurant_id}/addItem`}>
         <button>Menune yeni bir yemek ekle!</button>
       </a>
@@ -58,6 +72,6 @@ export default async function RestaurantDetails({ params }: RestaurantDetailsPro
       <a href={`/dashboard/owner/${restaurant.restaurant_id}/edit`}>
         <button>Restoran Bilgilerini Düzenle</button>
       </a>
-    </div>
+    </div >
   );
 }
