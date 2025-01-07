@@ -1,7 +1,9 @@
 import "~/styles/globals.css";
-
 import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
+import { getSession } from "~/lib/session"; // Kullanıcı oturum bilgisi
+import { UserRole } from "~/lib/enums/roles";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "restaurant management",
@@ -9,12 +11,45 @@ export const metadata: Metadata = {
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const session = await getSession();
+
+  // Kullanıcı rolüne göre yönlendirme linki
+  const isOwner = session?.user?.role === UserRole.OWNER;
+  const accountLink = isOwner
+    ? "/dashboard/profile"
+    : "/dashboard/customer/account";
+
   return (
     <html lang="en" className={`${GeistSans.variable}`}>
-      <body>{children}</body>
+      <body className="min-h-screen flex flex-col bg-gray-100">
+        {/* Ortak Header */}
+        <header className="bg-slate-700 text-white p-4 flex items-center justify-between shadow-lg">
+          <Link href="/ " className="text-2xl font-bold">Byte&Bite</Link>
+          <div className="flex items-center gap-4">
+            {/* Hesabım Linki */}
+            <a
+              href={accountLink}
+              className="bg-white text-slate-700 px-4 py-2 rounded hover:bg-gray-200 transition"
+            >
+              Hesabım
+            </a>
+
+            {/* Sepetim Linki */}
+            <Link
+              href="/basket"
+              className="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600 transition"
+            >
+              Sepetim
+            </Link>
+          </div>
+        </header>
+
+        {/* Sayfa İçeriği */}
+        <main className="flex-grow">{children}</main>
+      </body>
     </html>
   );
 }

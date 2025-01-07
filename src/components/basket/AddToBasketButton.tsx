@@ -3,6 +3,7 @@
 import React from "react";
 import { type MenuItem } from "~/lib/types/menuItem";
 import { addToBasket } from "~/services/basket";
+import { Button } from "~/components/ui/button";
 
 interface AddToCartButtonProps {
   item: MenuItem;
@@ -24,8 +25,11 @@ export default function AddToCartButton({ item }: AddToCartButtonProps) {
   };
 
   return (
-    <button onClick={handleAddToCart}>
+    <Button
+      onClick={handleAddToCart}
+      className="w-full bg-slate-700 hover:bg-purple-500 text-white py-0.5 rounded-md transition-all"
+    >
       Sepete Ekle
-    </button>
+    </Button>
   );
 }

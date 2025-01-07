@@ -4,6 +4,8 @@ import React, { useEffect, useState } from "react";
 import { fetchBasket, removeFromBasket } from "~/services/basket";
 import type { BasketItem as BasketItemType } from "~/lib/types/basketItem";
 import type { Address } from "~/lib/types/address";
+import { Button } from "~/components/ui/button";
+import Link from "next/link";
 
 export default function BasketAndPaymentPage() {
   const [basket, setBasket] = useState<BasketItemType[]>([]);
@@ -48,7 +50,6 @@ export default function BasketAndPaymentPage() {
   const handleRemoveFromBasket = async (itemId: number, quantity: number) => {
     try {
       if (quantity > 1) {
-        // eger urunden birden fazla varsa bir tane eksilt
         setBasket((prevBasket) =>
           prevBasket.map((item) =>
             item.item_id === itemId
@@ -57,7 +58,6 @@ export default function BasketAndPaymentPage() {
           )
         );
       } else {
-        // api'a istek atarak urunu sepetten cikar
         const response = await removeFromBasket(itemId);
         if (response.ok) {
           setBasket((prevBasket) =>
@@ -80,7 +80,7 @@ export default function BasketAndPaymentPage() {
       if (response.ok) {
         const data = (await response.json()) as { orderId: string };
         alert(`Order placed successfully! Order ID: ${data.orderId}`);
-        setBasket([]); // Sepeti temizle
+        setBasket([]);
       } else {
         const error = (await response.json()) as { error: string };
         alert(`Error: ${error.error}`);
@@ -96,38 +96,34 @@ export default function BasketAndPaymentPage() {
   }
 
   return (
-    <div className="p-4 space-y-8">
+    <div className="max-w-4xl mx-auto p-6 bg-gray-50 rounded-lg shadow space-y-8">
       {/* Sepet Bölümü */}
       <div>
-        <h1>Your Basket</h1>
+        <h1 className="text-2xl font-bold mb-4">Your Basket</h1>
         {basket.length === 0 ? (
-          <p>Your basket is empty!</p>
+          <p className="text-gray-500">Your basket is empty!</p>
         ) : (
-          <ul>
+          <ul className="space-y-4">
             {basket.map((item) => (
-              <li key={item.item_id} className="flex items-center justify-between">
+              <li
+                key={item.item_id}
+                className="flex items-center justify-between bg-white p-4 rounded-lg shadow"
+              >
                 <div>
-                  <h3>{item.name}</h3>
-                  <p>Price: ${item.price}</p>
-                  <p>Quantity: {item.quantity}</p>
+                  <h3 className="text-lg font-medium">{item.name}</h3>
+                  <p className="text-gray-600">Price: ${item.price}</p>
+                  <p className="text-gray-600">Quantity: {item.quantity}</p>
                 </div>
-                <div className="flex items-center">
-                  {item.quantity > 1 ? (
-                    <button
-                      onClick={() => void handleRemoveFromBasket(item.item_id, item.quantity)}
-                      className="bg-purple-500 text-white px-3 py-1 rounded"
-                    >
-                      -
-                    </button>
-                  ) : (
-                    <button
-                      onClick={() => void handleRemoveFromBasket(item.item_id, item.quantity)}
-                      className="bg-red-500 text-white px-3 py-1 rounded"
-                    >
-                      Remove
-                    </button>
-                  )}
-                  <button
+                <div className="flex items-center space-x-2">
+                  <Button
+                    variant="destructive"
+                    onClick={() =>
+                      void handleRemoveFromBasket(item.item_id, item.quantity)
+                    }
+                  >
+                    {item.quantity > 1 ? "-" : "Remove"}
+                  </Button>
+                  <Button
                     onClick={() =>
                       setBasket((prevBasket) =>
                         prevBasket.map((basketItem) =>
@@ -137,10 +133,9 @@ export default function BasketAndPaymentPage() {
                         )
                       )
                     }
-                    className="bg-purple-500 text-white px-3 py-1 ml-2 rounded"
                   >
                     +
-                  </button>
+                  </Button>
                 </div>
               </li>
             ))}
@@ -150,30 +145,32 @@ export default function BasketAndPaymentPage() {
 
       {/* Adres Bölümü */}
       <div>
-        <h2>Delivery Address</h2>
+        <h2 className="text-xl font-semibold mb-4">Delivery Address</h2>
         {defaultAddress ? (
-          <div>
-            <h3>{defaultAddress.address_title}</h3>
+          <div className="bg-white p-4 rounded-lg shadow">
+            <h3 className="font-medium">{defaultAddress.address_title}</h3>
             <p>{defaultAddress.address_line}</p>
             <p>{defaultAddress.city}</p>
           </div>
         ) : (
-          <p>No default address selected. Please select one.</p>
+          <p className="text-gray-500">
+            No default address selected. <Link className='underline' href="dashboard/customer/account/addresses">Please select one.</Link>
+          </p>
         )}
       </div>
 
       {/* Ödeme Butonu */}
-      <button
+      <Button
         onClick={handlePlaceOrder}
         disabled={basket.length === 0 || !defaultAddress}
-        className={`p-2 rounded ${
+        className={`w-full ${
           basket.length > 0 && defaultAddress
-            ? "bg-green-500 text-white hover:bg-green-700"
-            : "bg-gray-500 text-gray-300 cursor-not-allowed"
+            ? "bg-green-500 hover:bg-green-700"
+            : "bg-gray-500 cursor-not-allowed"
         }`}
       >
         Place Order
-      </button>
+      </Button>
     </div>
   );
 }

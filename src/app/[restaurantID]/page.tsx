@@ -3,66 +3,70 @@ import { fetchMenuItems } from "~/services/menuItems";
 import { type Restaurant } from "~/lib/types/restaurant";
 import { type MenuItem } from "~/lib/types/menuItem";
 import { notFound } from "next/navigation";
-import AddToCartButton from "~/components/basket/AddToBasketButton";
+import MenuItemCard from "~/components/MenuItemCard";
 import Link from "next/link";
+import { Button } from "~/components/ui/button";
 
 interface RestaurantPageProps {
-  params: { restaurantID: string }; // Dinamik parametre tipi
+  params: { restaurantID: string };
 }
 
 export default async function CustomerRestaurantPage({ params }: RestaurantPageProps) {
   const restaurantID = Number(params.restaurantID);
 
-  // ID'nin geçerli olup olmadığını kontrol et
   if (isNaN(restaurantID)) {
     throw new Error("Geçersiz restoran ID'si");
   }
 
-  // Restoran bilgilerini al
   const restaurant: Restaurant | null = await fetchRestaurantById(restaurantID);
 
-  // Restoran bulunamazsa 404 sayfasına yönlendir
   if (!restaurant) {
     notFound();
   }
 
-  // Restoranın menü öğelerini al
   const menuItems: MenuItem[] = await fetchMenuItems(restaurantID);
 
   return (
-    <div>
-      <h1>{restaurant.name}</h1>
-      <p>Adres: {restaurant.address}</p>
-      <p>Telefon: {restaurant.phone}</p>
+    <div className="flex flex-col items-start bg-gray-50 min-h-screen p-14">
+      {/* Restoran Bilgileri */}
+      <header className="w-full bg-white  rounded-lg shadow  text-black border py-6">
+        <div className="max-w-4xl mx-auto flex flex-col items-center">
+          <h1 className="text-3xl font-bold mb-2">{restaurant.name}</h1>
+          <div className="flex items-center space-x-2">
+            <p className="text-lg font-thin mb-1">{restaurant.address}</p>
+            <span>|</span>
+            <p className="text-lg font-thin mb-1">+(90) {restaurant.phone}</p>
+          </div>
+        </div>
+      </header>
 
-      <h2>Menü</h2>
-      <br />
-      {menuItems.length === 0 ? (
-        <p>Bu restoran için henüz menü öğesi eklenmemiş.</p>
-      ) : (
-        <ul>
-          {menuItems.map((item) => (
-            <li key={item.item_id}>
-              <h3>{item.name}</h3>
-              <p>{item.description}</p>
-              <p>{item.price} TL</p>
-              <AddToCartButton item={item} />
-              <br />
-              <br />
-            </li>
-          ))}
-        </ul>
-      )}
+      {/* Menü Başlığı */}
+      <div className="max-w-4xl w-full mt-6">
+        <h2 className="text-2xl font-semibold text-gray-800 mb-4">Menü</h2>
 
-      <Link href="/basket">
-        <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">
-          Sepet
-        </button>
-      </Link>
+        {/* Menü Öğeleri */}
+        {menuItems.length === 0 ? (
+          <p className="text-gray-600">Bu restoran için henüz menü öğesi eklenmemiş.</p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {menuItems.map((item) => (
+              <MenuItemCard key={item.item_id} item={item} />
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Sepet Butonu */}
+      <div className="fixed bottom-6 right-6">
+        <Link href="/basket">
+          <Button
+            size="lg"
+            className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg rounded-full px-6 py-3"
+          >
+            Sepetim
+          </Button>
+        </Link>
+      </div>
     </div>
   );
 }
-
-/**
- * todo:menu itemlerini component olarak ayirin
- */
