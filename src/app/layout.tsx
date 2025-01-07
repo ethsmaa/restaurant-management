@@ -30,26 +30,31 @@ export default async function RootLayout({
           <Link href="/ " className="text-2xl font-bold">Byte&Bite</Link>
           <div className="flex items-center gap-4">
             {/* Hesabım Linki */}
-            <a
+            {session.user && <div> <a
               href={accountLink}
               className="bg-white text-slate-700 px-4 py-2 rounded hover:bg-gray-200 transition"
             >
               Hesabım
             </a>
+              {
+                session?.user?.role === UserRole.CUSTOMER &&
+                < Link
+                  href="/basket"
+                  className="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600 transition"
+                >
+                  Sepetim
 
-            {/* Sepetim Linki */}
-            <Link
-              href="/basket"
-              className="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600 transition"
-            >
-              Sepetim
-            </Link>
+                </Link>
+              }</div>
+            }
+
+
           </div>
         </header>
 
         {/* Sayfa İçeriği */}
         <main className="flex-grow">{children}</main>
       </body>
-    </html>
+    </html >
   );
 }
