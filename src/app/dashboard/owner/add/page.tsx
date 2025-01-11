@@ -2,11 +2,12 @@ import { UserRole } from "~/lib/enums/roles";
 import { getSession } from "~/lib/session";
 
 export default async function AddRestaurantPage() {
-
   const { user } = await getSession();
 
   if (!user || user.role !== UserRole.OWNER) {
-    return <p>Yetkisiz erişim. Burayi gormek icin restoran sahibi olmalisiniz.</p>;
+    return (
+      <p>Yetkisiz erişim. Burayi gormek icin restoran sahibi olmalisiniz.</p>
+    );
   }
 
   return (
@@ -14,7 +15,8 @@ export default async function AddRestaurantPage() {
       <form
         action="/api/restaurants"
         method="post"
-        className="flex flex-col gap-4 p-4 rounded-lg shadow-lg">
+        className="flex flex-col gap-4 rounded-lg p-4 shadow-lg"
+      >
         <label>
           <span>Restoran Adi</span>
           <input className="text-black" type="text" name="name" required />
@@ -28,11 +30,10 @@ export default async function AddRestaurantPage() {
           <input className="text-black" type="string" name="phone" required />
         </label>
 
-
-
         <button
           type="submit"
-          className="bg-blue-500 p-2 rounded hover:bg-blue-700 mt-4">
+          className="mt-4 rounded bg-blue-500 p-2 hover:bg-blue-700"
+        >
           Ekle
         </button>
       </form>

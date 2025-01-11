@@ -1,11 +1,15 @@
 import { fetchOrdersByRestaurantId } from "~/services/orders";
 import OrderItem from "~/components/OrderItem";
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
+import { Separator } from "~/components/ui/separator";
 
 interface RestaurantOrdersProps {
   params: { id: string };
 }
 
-export default async function RestaurantOrders({ params }: RestaurantOrdersProps) {
+export default async function RestaurantOrders({
+  params,
+}: RestaurantOrdersProps) {
   const restaurantId = Number(params.id);
 
   if (isNaN(restaurantId)) {
@@ -15,17 +19,41 @@ export default async function RestaurantOrders({ params }: RestaurantOrdersProps
   const orders = await fetchOrdersByRestaurantId(restaurantId);
 
   if (orders.length === 0) {
-    return <p>No orders found for this restaurant.</p>;
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-[#cecbd1] to-[#15162c] text-white">
+        <Card className="p-6">
+          <CardHeader>
+            <CardTitle className="text-center text-lg font-bold">
+              No Orders Found
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-center">
+              This restaurant has no orders at the moment.
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+    );
   }
 
   return (
-    <div>
-      <h1>Restaurant Orders</h1>
-      <ul className="space-y-4">
-        {orders.map((order) => (
-          <OrderItem key={order.order_id} order={order} />
-        ))}
-      </ul>
-    </div>
+    <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
+      <Card className="w-full max-w-4xl p-6 shadow-lg">
+        <CardHeader>
+          <CardTitle className="text-center text-xl font-bold">
+            Restaurant Orders
+          </CardTitle>
+          <Separator className="my-4" />
+        </CardHeader>
+        <CardContent>
+          <ul className="space-y-4">
+            {orders.map((order) => (
+              <OrderItem key={order.order_id} order={order} />
+            ))}
+          </ul>
+        </CardContent>
+      </Card>
+    </main>
   );
 }

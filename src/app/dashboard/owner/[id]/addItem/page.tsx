@@ -1,9 +1,17 @@
-'use client';
+"use client";
 
-import { use } from 'react';
-import { useState } from 'react';
+import { use } from "react";
+import { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
+import { Button } from "~/components/ui/button";
+import { Input } from "~/components/ui/input";
+import { Label } from "~/components/ui/label";
 
-export default function AddMenuItemPage({ params }: { params: Promise<{ id: string }> }) {
+export default function AddMenuItemPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const resolvedParams = use(params); // Promise çözülüyor
   const { id } = resolvedParams;
 
@@ -14,93 +22,87 @@ export default function AddMenuItemPage({ params }: { params: Promise<{ id: stri
   };
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
-      <form
-        action="/api/addItem"
-        method="post"
-        className="flex flex-col gap-4 p-4 rounded-lg shadow-lg"
-      >
-        <input type="hidden" name="restaurantId" value={id} />
+    <main className="flex min-h-screen items-center justify-center bg-gradient-to-b from-[#c0bbc6] to-[#15162c] text-white">
+      <Card className="w-full max-w-md p-6 shadow-lg">
+        <CardHeader>
+          <CardTitle className="text-center text-lg font-bold">
+            Yeni Menü Öğesi Ekle
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form action="/api/addItem" method="post" className="space-y-4">
+            <input type="hidden" name="restaurantId" value={id} />
 
-        <label>
-          <span>Item Name</span>
-          <input
-            className="text-black"
-            type="text"
-            name="name"
-            placeholder="Item Name"
-            required
-          />
-        </label>
-        <label>
-          <span>Description</span>
-          <input
-            className="text-black"
-            type="text"
-            name="description"
-            placeholder="Item Description"
-          />
-        </label>
-        <label>
-          <span>Price</span>
-          <input
-            className="text-black"
-            type="number"
-            name="price"
-            placeholder="Price"
-            required
-          />
-        </label>
+            <div>
+              <Label htmlFor="name">Ürün Adı</Label>
+              <Input
+                id="name"
+                type="text"
+                name="name"
+                placeholder="Ürün Adını Girin"
+                required
+              />
+            </div>
+            <div>
+              <Label htmlFor="description">Açıklama</Label>
+              <Input
+                id="description"
+                type="text"
+                name="description"
+                placeholder="Ürün Açıklaması"
+              />
+            </div>
+            <div>
+              <Label htmlFor="price">Fiyat</Label>
+              <Input
+                id="price"
+                type="number"
+                name="price"
+                placeholder="Fiyat Girin"
+                required
+              />
+            </div>
 
-        <div className="flex gap-2 mt-4">
-          <button
-            type="button"
-            onClick={() => handleCategoryClick("starter")}
-            className={`w-full p-2 rounded-md ${
-              selectedCategory === "starter" ? "bg-blue-500 text-white" : "bg-white text-black"
-            } hover:bg-gray-300`}
-          >
-            Starter
-          </button>
-          <button
-            type="button"
-            onClick={() => handleCategoryClick("main_course")}
-            className={`w-full p-2 rounded-md ${
-              selectedCategory === "main_course" ? "bg-blue-500 text-white" : "bg-white text-black"
-            } hover:bg-gray-300`}
-          >
-            Main Course
-          </button>
-          <button
-            type="button"
-            onClick={() => handleCategoryClick("dessert")}
-            className={`w-full p-2 rounded-md ${
-              selectedCategory === "dessert" ? "bg-blue-500 text-white" : "bg-white text-black"
-            } hover:bg-gray-300`}
-          >
-            Dessert
-          </button>
-        </div>
+            <div>
+              <Label>Kategori</Label>
+              <div className="mt-2 flex gap-2">
+                <Button
+                  type="button"
+                  variant={
+                    selectedCategory === "starter" ? "default" : "outline"
+                  }
+                  onClick={() => handleCategoryClick("starter")}
+                >
+                  Başlangıç
+                </Button>
+                <Button
+                  type="button"
+                  variant={
+                    selectedCategory === "main_course" ? "default" : "outline"
+                  }
+                  onClick={() => handleCategoryClick("main_course")}
+                >
+                  Ana Yemek
+                </Button>
+                <Button
+                  type="button"
+                  variant={
+                    selectedCategory === "dessert" ? "default" : "outline"
+                  }
+                  onClick={() => handleCategoryClick("dessert")}
+                >
+                  Tatlı
+                </Button>
+              </div>
+              <input type="hidden" name="category" value={selectedCategory} />
+            </div>
 
-        <input type="hidden" name="category" value={selectedCategory} />
-
-        <label>
-          <span>Image URL</span>
-          <input
-            className="text-black"
-            type="text"
-            name="imageUrl"
-            placeholder="Image URL"
-          />
-        </label>
-
-        <button
-          type="submit"
-          className="bg-blue-500 p-2 rounded hover:bg-blue-700 mt-4"
-        >
-          Add Item
-        </button>
-      </form>
+            <Button type="submit" className="mt-4 w-full">
+              Ekle
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
     </main>
   );
 }

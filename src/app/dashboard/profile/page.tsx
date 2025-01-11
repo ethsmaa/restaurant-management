@@ -4,7 +4,11 @@ import { useState, useEffect } from "react";
 import type { EditableUser } from "~/lib/types/user"; // User tipini içeri aktar
 
 export default function ProfilePage() {
-  const [user, setUser] = useState<EditableUser>({ name: "", email: "", password: "" });
+  const [user, setUser] = useState<EditableUser>({
+    name: "",
+    email: "",
+    password: "",
+  });
   const [loading, setLoading] = useState(true);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -16,7 +20,7 @@ export default function ProfilePage() {
         if (!response.ok) {
           throw new Error("Failed to fetch user data");
         }
-        const data: EditableUser = await response.json() as EditableUser;
+        const data: EditableUser = (await response.json()) as EditableUser;
         setUser({ ...data, password: "" });
         setLoading(false);
       } catch (error) {
@@ -77,7 +81,6 @@ export default function ProfilePage() {
         setUser({ name: "", email: "", password: "" });
 
         window.location.href = "/login";
-
       } catch (error) {
         console.error("Error deleting profile:", error);
         setErrorMessage("Hesap silinirken hata oluştu.");
@@ -90,17 +93,19 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="max-w-md mx-auto mt-10">
-      <h1 className="text-2xl font-bold mb-4">Profilimi Güncelle</h1>
+    <div className="mx-auto mt-10 max-w-md">
+      <h1 className="mb-4 text-2xl font-bold">Profilimi Güncelle</h1>
 
-      {successMessage && <p className="text-green-600 mb-4">{successMessage}</p>}
-      {errorMessage && <p className="text-red-600 mb-4">{errorMessage}</p>}
+      {successMessage && (
+        <p className="mb-4 text-green-600">{successMessage}</p>
+      )}
+      {errorMessage && <p className="mb-4 text-red-600">{errorMessage}</p>}
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <label>
           <span>Ad Soyad:</span>
           <input
-            className="w-full p-2 border rounded"
+            className="w-full rounded border p-2"
             type="text"
             name="name"
             value={user.name}
@@ -111,7 +116,7 @@ export default function ProfilePage() {
         <label>
           <span>Email:</span>
           <input
-            className="w-full p-2 border rounded"
+            className="w-full rounded border p-2"
             type="email"
             name="email"
             value={user.email}
@@ -122,7 +127,7 @@ export default function ProfilePage() {
         <label>
           <span>Şifre (opsiyonel):</span>
           <input
-            className="w-full p-2 border rounded"
+            className="w-full rounded border p-2"
             type="password"
             name="password"
             value={user.password}
@@ -132,7 +137,7 @@ export default function ProfilePage() {
 
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-700"
+          className="w-full rounded bg-blue-500 p-2 text-white hover:bg-blue-700"
         >
           Güncelle
         </button>
@@ -140,7 +145,7 @@ export default function ProfilePage() {
 
       <button
         onClick={handleDelete}
-        className="w-full bg-red-500 text-white p-2 rounded hover:bg-red-700 mt-4"
+        className="mt-4 w-full rounded bg-red-500 p-2 text-white hover:bg-red-700"
       >
         Hesabı Sil
       </button>

@@ -8,12 +8,14 @@ export default function EditMenuItemPage() {
   const params = useParams();
   const router = useRouter();
   const itemId = Number(params.itemId);
-  const restaurantId = Number(params.restaurantId);
 
   const [menuItem, setMenuItem] = useState<MenuItem | null>(null);
   const [loading, setLoading] = useState(true);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [copyOfRestaurantId, setCopyOfRestaurantId] = useState<number | null>(
+    null,
+  );
 
   useEffect(() => {
     if (!itemId) {
@@ -33,6 +35,7 @@ export default function EditMenuItemPage() {
         const data = (await response.json()) as MenuItem;
         setMenuItem(data);
         setLoading(false);
+        setCopyOfRestaurantId(data.restaurant_id);
       } catch (error) {
         console.error(error);
         setErrorMessage("Menü öğesi bilgileri alınamadı.");
@@ -41,7 +44,7 @@ export default function EditMenuItemPage() {
     };
 
     fetchMenuItem().catch((error) =>
-      console.error("Error fetching menu item:", error)
+      console.error("Error fetching menu item:", error),
     );
   }, [itemId]);
 
@@ -89,8 +92,9 @@ export default function EditMenuItemPage() {
           throw new Error("Failed to delete menu item");
         }
 
+        router.push(`/dashboard/owner/${copyOfRestaurantId}`);
+
         setSuccessMessage("Menü öğesi başarıyla silindi.");
-        router.push(`/dashboard/owner/${restaurantId}`);
       } catch (error) {
         console.error("Error deleting menu item:", error);
         setErrorMessage("Menü öğesi silinirken hata oluştu.");
@@ -107,17 +111,21 @@ export default function EditMenuItemPage() {
   }
 
   return (
-    <div className="max-w-md mx-auto mt-10">
-      <h1 className="text-2xl font-bold mb-4">Menü Öğesi Bilgilerini Güncelle</h1>
+    <div className="mx-auto mt-10 max-w-md">
+      <h1 className="mb-4 text-2xl font-bold">
+        Menü Öğesi Bilgilerini Güncelle
+      </h1>
 
-      {successMessage && <p className="text-green-600 mb-4">{successMessage}</p>}
-      {errorMessage && <p className="text-red-600 mb-4">{errorMessage}</p>}
+      {successMessage && (
+        <p className="mb-4 text-green-600">{successMessage}</p>
+      )}
+      {errorMessage && <p className="mb-4 text-red-600">{errorMessage}</p>}
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <label>
           <span>Menü Öğesi Adı:</span>
           <input
-            className="w-full p-2 border rounded"
+            className="w-full rounded border p-2"
             type="text"
             name="name"
             value={menuItem.name}
@@ -130,7 +138,7 @@ export default function EditMenuItemPage() {
         <label>
           <span>Açıklama:</span>
           <input
-            className="w-full p-2 border rounded"
+            className="w-full rounded border p-2"
             type="text"
             name="description"
             value={menuItem.description}
@@ -143,7 +151,7 @@ export default function EditMenuItemPage() {
         <label>
           <span>Fiyat:</span>
           <input
-            className="w-full p-2 border rounded"
+            className="w-full rounded border p-2"
             type="number"
             name="price"
             value={menuItem.price}
@@ -156,7 +164,7 @@ export default function EditMenuItemPage() {
 
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-700"
+          className="w-full rounded bg-blue-500 p-2 text-white hover:bg-blue-700"
         >
           Güncelle
         </button>
@@ -164,14 +172,16 @@ export default function EditMenuItemPage() {
 
       <button
         onClick={handleDelete}
-        className="mt-4 bg-red-500 text-white p-2 rounded hover:bg-red-700"
+        className="mt-4 rounded bg-red-500 p-2 text-white hover:bg-red-700"
       >
         Menü Öğesini Sil
       </button>
 
       <button
-        onClick={() => router.push(`/dashboard/owner/${menuItem.restaurant_id}`)}
-        className="mt-4 bg-blue-500 text-white p-2 rounded hover:bg-blue-700"
+        onClick={() =>
+          router.push(`/dashboard/owner/${menuItem.restaurant_id}`)
+        }
+        className="mt-4 rounded bg-blue-500 p-2 text-white hover:bg-blue-700"
       >
         Geri Dön
       </button>
