@@ -86,7 +86,11 @@ export async function fetchRestaurantById(restaurantId: number): Promise<Restaur
   }
 }
 
-
+/**
+ * Tüm restoranları alır.
+ * @returns {Promise<Restaurant[]>} Restoranlar listesi.
+ * 
+ */
 export async function fetchAllRestaurants(): Promise<Restaurant[]> {
   const db = await getConnection();
   const [restaurants] = await db.query<(Restaurant & RowDataPacket)[]>(
@@ -148,3 +152,49 @@ export async function deleteRestaurant(restaurantId: number): Promise<void> {
     throw new Error("Restoran silinirken bir hata oluştu.");
   }
 }
+
+export async function fetchRestaurantsByOrderCount(): Promise<Restaurant[]> {
+  try {
+    const db = await getConnection(); // Database bağlantısını al
+    const [restaurants] = await db.query<(Restaurant & RowDataPacket)[]>(
+      `SELECT restaurant_id, name, address, phone, order_count
+       FROM RestaurantOrderCounts`
+    );
+
+    return restaurants as Restaurant[];
+  } catch (error) {
+    console.error("Database query error:", error); // Hatanın tamamını yazdır
+    throw new Error("Failed to fetch restaurants by order count.");
+  }
+}
+
+
+
+export async function fetchRestaurantsAlphabetically(): Promise<Restaurant[]> {
+  const db = await getConnection();
+  const [restaurants] = await db.query<(Restaurant & RowDataPacket)[]>(
+    "SELECT * FROM AlphabeticalRestaurants"
+  );
+
+  return restaurants as Restaurant[];
+}
+
+
+/**
+ * Restoranin gelirini hesaplar.
+ * @param {number} restaurantId - Restoran ID'si.
+ * @returns {Promise<number>} Restoranin toplam geliri.
+ * 
+ */
+export async function calculateRestaurantRevenue(restaurantId: number): Promise<number> {
+  const db = await getConnection();
+  const [results] = await db.query<(RowDataPacket & { total: number })[]>(
+    `SELECT total_revenue AS total
+     FROM RestaurantRevenue r
+     WHERE r.restaurant_id = ?`,
+    [restaurantId],
+  );
+
+  return results[0]?.total ?? 0;
+}
+

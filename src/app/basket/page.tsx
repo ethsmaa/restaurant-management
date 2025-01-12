@@ -7,6 +7,8 @@ import type { Address } from "~/lib/types/address";
 import { Button } from "~/components/ui/button";
 import Link from "next/link";
 
+import { FaTrash } from "react-icons/fa";
+
 export default function BasketAndPaymentPage() {
   const [basket, setBasket] = useState<BasketItemType[]>([]);
   const [defaultAddress, setDefaultAddress] = useState<Address | null>(null);
@@ -96,7 +98,7 @@ export default function BasketAndPaymentPage() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-gray-50 rounded-lg shadow space-y-8">
+    <div className="max-w-4xl mx-auto p-6 m-10 bg-gray-50 rounded-lg shadow space-y-8">
       {/* Sepet Bölümü */}
       <div>
         <h1 className="text-2xl font-bold mb-4">Your Basket</h1>
@@ -121,7 +123,10 @@ export default function BasketAndPaymentPage() {
                       void handleRemoveFromBasket(item.item_id, item.quantity)
                     }
                   >
-                    {item.quantity > 1 ? "-" : "Remove"}
+                    {item.quantity > 1 ? <span className="text-2xl">-</span>: <span className="flex items-center gap-1">
+                      <FaTrash />
+                  
+                    </span>}
                   </Button>
                   <Button
                     onClick={() =>
@@ -134,7 +139,7 @@ export default function BasketAndPaymentPage() {
                       )
                     }
                   >
-                    +
+                    <span className="text-xl">+</span>
                   </Button>
                 </div>
               </li>
@@ -163,11 +168,10 @@ export default function BasketAndPaymentPage() {
       <Button
         onClick={handlePlaceOrder}
         disabled={basket.length === 0 || !defaultAddress}
-        className={`w-full ${
-          basket.length > 0 && defaultAddress
+        className={`w-full ${basket.length > 0 && defaultAddress
             ? "bg-green-500 hover:bg-green-700"
             : "bg-gray-500 cursor-not-allowed"
-        }`}
+          }`}
       >
         Place Order
       </Button>

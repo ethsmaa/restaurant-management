@@ -10,17 +10,16 @@ export default async function OwnerDashboard() {
 
     return (
       <div className="p-14">
-        <h1 className="mb-8 text-2xl font-bold">Restoran Yönetimi</h1>
+        <h1 className="mb-8 text-2xl font-bold">Restaurant Management</h1>
 
         {restaurants.length === 0 ? (
           <div className="text-center">
             <p className="text-lg text-gray-600">
-              Henüz bir restoranınız yok. Yeni bir restoran eklemek için
-              aşağıdaki butona tıklayın.
+              You don&apos;t have any restaurants yet. Click the button below to add a new restaurant.
             </p>
             <Link href="/dashboard/owner/add">
               <Button className="mt-6" variant="default">
-                Yeni Restoran Ekle
+                Add New Restaurant
               </Button>
             </Link>
           </div>
@@ -40,7 +39,7 @@ export default async function OwnerDashboard() {
                   <p className="text-sm text-gray-600">{restaurant.address}</p>
                   <Link href={`/dashboard/owner/${restaurant.restaurant_id}`}>
                     <Button className="mt-4 w-full" variant="default">
-                      Yönetim Sayfasına Git
+                      Manage
                     </Button>
                   </Link>
                 </CardContent>
@@ -52,7 +51,7 @@ export default async function OwnerDashboard() {
         <div className="mt-8">
           <Link href="/dashboard/owner/add">
             <Button className="w-full sm:w-auto" variant="default">
-              Yeni Restoran Ekle
+              Add New Restaurant
             </Button>
           </Link>
         </div>
@@ -66,7 +65,7 @@ export default async function OwnerDashboard() {
     console.error(error);
     return (
       <p className="text-center text-red-600">
-        Yetkisiz erişim. Lütfen giriş yapınız.
+        Unauthorized access. Please log in.
       </p>
     );
   }

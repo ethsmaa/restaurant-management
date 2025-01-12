@@ -15,7 +15,7 @@ export default async function OrdersPage() {
           {orders.map((order) => (
             <li
               key={order.order_id}
-              className="border rounded-lg p-4 shadow hover:shadow-lg transition"
+              className="border bg-white rounded-lg p-4 shadow hover:shadow-lg transition"
             >
               <div>
                 <p className="font-bold text-lg">Order #{order.order_id}</p>

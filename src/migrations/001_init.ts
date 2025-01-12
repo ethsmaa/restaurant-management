@@ -24,12 +24,11 @@ const migrations = [
       description TEXT,
       price DECIMAL(10, 2) NOT NULL,
       category VARCHAR(50),
-      image_url TEXT,
       FOREIGN KEY (restaurant_id) REFERENCES Restaurants(restaurant_id)
           ON DELETE CASCADE
     );`,
 
-    `CREATE TABLE if not exists Addresses (
+  `CREATE TABLE if not exists Addresses (
       address_id INT AUTO_INCREMENT PRIMARY KEY,
       user_id INT NOT NULL,
       address_title VARCHAR(100) NOT NULL,
@@ -70,10 +69,10 @@ const migrations = [
           ON DELETE CASCADE
     );`,
 
-
+  
 
   // Admin kullanıcı ekleme
-  `INSERT INTO Users (name, email, password, role) VALUES ('admin', 'admin@admin.com', 'admin', 'admin');`
+  `INSERT INTO Users (name, email, password, role) VALUES ('admin', 'admin@admin.com', 'admin', 'admin');`,
 ];
 
 export default migrations;

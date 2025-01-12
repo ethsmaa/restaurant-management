@@ -57,8 +57,10 @@ export default {
   				'3': 'hsl(var(--chart-3))',
   				'4': 'hsl(var(--chart-4))',
   				'5': 'hsl(var(--chart-5))'
-  			}
-  		}
+  			},
+			buttonColor:'#38b568',
+			secondaryCustom:'#211c25'
+  		}		
   	}
   },
   plugins: [require("tailwindcss-animate")],

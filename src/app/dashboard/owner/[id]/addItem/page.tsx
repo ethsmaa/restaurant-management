@@ -12,7 +12,7 @@ export default function AddMenuItemPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const resolvedParams = use(params); // Promise çözülüyor
+  const resolvedParams = use(params); // Resolving the promise
   const { id } = resolvedParams;
 
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -22,11 +22,11 @@ export default function AddMenuItemPage({
   };
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-gradient-to-b from-[#c0bbc6] to-[#15162c] text-white">
+    <main className="flex min-h-screen items-center justify-center bg-[#f3f4f6] text-white">
       <Card className="w-full max-w-md p-6 shadow-lg">
         <CardHeader>
           <CardTitle className="text-center text-lg font-bold">
-            Yeni Menü Öğesi Ekle
+            Add New Menu Item
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -34,37 +34,37 @@ export default function AddMenuItemPage({
             <input type="hidden" name="restaurantId" value={id} />
 
             <div>
-              <Label htmlFor="name">Ürün Adı</Label>
+              <Label htmlFor="name">Product Name</Label>
               <Input
                 id="name"
                 type="text"
                 name="name"
-                placeholder="Ürün Adını Girin"
+                placeholder="Enter Product Name"
                 required
               />
             </div>
             <div>
-              <Label htmlFor="description">Açıklama</Label>
+              <Label htmlFor="description">Description</Label>
               <Input
                 id="description"
                 type="text"
                 name="description"
-                placeholder="Ürün Açıklaması"
+                placeholder="Enter Product Description"
               />
             </div>
             <div>
-              <Label htmlFor="price">Fiyat</Label>
+              <Label htmlFor="price">Price</Label>
               <Input
                 id="price"
                 type="number"
                 name="price"
-                placeholder="Fiyat Girin"
+                placeholder="Enter Price"
                 required
               />
             </div>
 
             <div>
-              <Label>Kategori</Label>
+              <Label>Category</Label>
               <div className="mt-2 flex gap-2">
                 <Button
                   type="button"
@@ -73,7 +73,7 @@ export default function AddMenuItemPage({
                   }
                   onClick={() => handleCategoryClick("starter")}
                 >
-                  Başlangıç
+                  Starter
                 </Button>
                 <Button
                   type="button"
@@ -82,7 +82,7 @@ export default function AddMenuItemPage({
                   }
                   onClick={() => handleCategoryClick("main_course")}
                 >
-                  Ana Yemek
+                  Main Course
                 </Button>
                 <Button
                   type="button"
@@ -91,14 +91,14 @@ export default function AddMenuItemPage({
                   }
                   onClick={() => handleCategoryClick("dessert")}
                 >
-                  Tatlı
+                  Dessert
                 </Button>
               </div>
               <input type="hidden" name="category" value={selectedCategory} />
             </div>
 
             <Button type="submit" className="mt-4 w-full">
-              Ekle
+              Add
             </Button>
           </form>
         </CardContent>

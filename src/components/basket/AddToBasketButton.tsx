@@ -18,18 +18,18 @@ export default function AddToCartButton({ item }: AddToCartButtonProps) {
         price: item.price,
       });
 
-      alert(`${item.name} sepete eklendi!`);
+      alert(`${item.name} has been added to the basket!`);
     } catch (error) {
-      alert("Bir hata oluştu. Lütfen tekrar deneyin.");
+      alert("An error occurred. Please try again.");
     }
   };
 
   return (
     <Button
       onClick={handleAddToCart}
-      className="w-full bg-slate-700 hover:bg-purple-500 text-white py-0.5 rounded-md transition-all"
+      className="w-full bg-slate-700 hover:bg-buttonColor text-white py-0.5 rounded-md transition-all"
     >
-      Sepete Ekle
+      Add to Basket
     </Button>
   );
 }

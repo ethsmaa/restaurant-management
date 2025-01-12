@@ -1,7 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import type { EditableUser } from "~/lib/types/user"; // User tipini içeri aktar
+import type { EditableUser } from "~/lib/types/user";
+import { Input } from "~/components/ui/input";
+import { Button } from "~/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
+import { Alert } from "~/components/ui/alert";
 
 export default function ProfilePage() {
   const [user, setUser] = useState<EditableUser>({
@@ -25,7 +29,7 @@ export default function ProfilePage() {
         setLoading(false);
       } catch (error) {
         console.error(error);
-        setErrorMessage("Kullanıcı bilgileri alınamadı.");
+        setErrorMessage("Failed to fetch user information.");
         setLoading(false);
       }
     };
@@ -56,15 +60,15 @@ export default function ProfilePage() {
         throw new Error("Failed to update profile");
       }
 
-      setSuccessMessage("Profil başarıyla güncellendi.");
+      setSuccessMessage("Profile successfully updated.");
     } catch (error) {
       console.error("Error updating profile:", error);
-      setErrorMessage("Profil güncellenirken hata oluştu.");
+      setErrorMessage("An error occurred while updating the profile.");
     }
   };
 
   const handleDelete = async () => {
-    if (confirm("Hesabınızı silmek istediğinize emin misiniz?")) {
+    if (confirm("Are you sure you want to delete your account?")) {
       setSuccessMessage(null);
       setErrorMessage(null);
 
@@ -77,78 +81,89 @@ export default function ProfilePage() {
           throw new Error("Failed to delete profile");
         }
 
-        setSuccessMessage("Hesap başarıyla silindi.");
+        setSuccessMessage("Account successfully deleted.");
         setUser({ name: "", email: "", password: "" });
 
         window.location.href = "/login";
       } catch (error) {
         console.error("Error deleting profile:", error);
-        setErrorMessage("Hesap silinirken hata oluştu.");
+        setErrorMessage("An error occurred while deleting the account.");
       }
     }
   };
 
   if (loading) {
-    return <p>Yükleniyor...</p>;
+    return <p className="text-center text-gray-700">Loading...</p>;
   }
 
   return (
-    <div className="mx-auto mt-10 max-w-md">
-      <h1 className="mb-4 text-2xl font-bold">Profilimi Güncelle</h1>
-
-      {successMessage && (
-        <p className="mb-4 text-green-600">{successMessage}</p>
-      )}
-      {errorMessage && <p className="mb-4 text-red-600">{errorMessage}</p>}
-
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <label>
-          <span>Ad Soyad:</span>
-          <input
-            className="w-full rounded border p-2"
-            type="text"
-            name="name"
-            value={user.name}
-            onChange={handleChange}
-            required
-          />
-        </label>
-        <label>
-          <span>Email:</span>
-          <input
-            className="w-full rounded border p-2"
-            type="email"
-            name="email"
-            value={user.email}
-            onChange={handleChange}
-            required
-          />
-        </label>
-        <label>
-          <span>Şifre (opsiyonel):</span>
-          <input
-            className="w-full rounded border p-2"
-            type="password"
-            name="password"
-            value={user.password}
-            onChange={handleChange}
-          />
-        </label>
-
-        <button
-          type="submit"
-          className="w-full rounded bg-blue-500 p-2 text-white hover:bg-blue-700"
-        >
-          Güncelle
-        </button>
-      </form>
-
-      <button
-        onClick={handleDelete}
-        className="mt-4 w-full rounded bg-red-500 p-2 text-white hover:bg-red-700"
-      >
-        Hesabı Sil
-      </button>
-    </div>
+    <main className="flex min-h-screen items-center justify-center bg-gray-50 p-4">
+      <Card className="w-full max-w-lg shadow-lg">
+        <CardHeader>
+          <CardTitle className="text-center text-2xl font-bold text-gray-700">
+            Update Profile
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          {successMessage && (
+            <Alert className="mb-4 text-green-600" variant="default">
+              {successMessage}
+            </Alert>
+          )}
+          {errorMessage && (
+            <Alert className="mb-4 text-red-600" variant="destructive">
+              {errorMessage}
+            </Alert>
+          )}
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Full Name
+              </label>
+              <Input
+                type="text"
+                name="name"
+                value={user.name}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Email
+              </label>
+              <Input
+                type="email"
+                name="email"
+                value={user.email}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Password (optional)
+              </label>
+              <Input
+                type="password"
+                name="password"
+                value={user.password}
+                onChange={handleChange}
+              />
+            </div>
+            <Button type="submit" className="mt-4 w-full">
+              Update
+            </Button>
+          </form>
+          <Button
+            onClick={handleDelete}
+            variant="destructive"
+            className="mt-4 w-full"
+          >
+            Delete Account
+          </Button>
+        </CardContent>
+      </Card>
+    </main>
   );
 }

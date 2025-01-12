@@ -78,3 +78,32 @@ export async function deleteUser(): Promise<void> {
   await db.query("DELETE FROM Users WHERE user_id = ?", [session.user.id]);
   
 }
+
+
+/**
+ * Rolu customer olan kullanıcıları getirir
+ * @returns {Promise<User[]>} Kullanıcılar
+ * 
+ */
+export async function fetchCustomers(): Promise<User[]> {
+  const db = await getConnection();
+  const [results] = await db.query<(User & RowDataPacket)[]>(
+    "SELECT user_id, name, email FROM Users WHERE role = 'customer'"
+  );
+
+  return results;
+}
+
+/**
+ * Rolu owner olan kullanıcıları getirir
+ * @returns {Promise<User[]>} Kullanıcılar
+ * 
+ */
+export async function fetchOwners(): Promise<User[]> {
+  const db = await getConnection();
+  const [results] = await db.query<(User & RowDataPacket)[]>(
+    "SELECT user_id, name, email FROM Users WHERE role = 'restaurant_owner'"
+  );
+
+  return results;
+}

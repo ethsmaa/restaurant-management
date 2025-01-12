@@ -20,7 +20,7 @@ export default async function RestaurantOrders({
 
   if (orders.length === 0) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-[#cecbd1] to-[#15162c] text-white">
+      <div className="flex min-h-screen items-center justify-center bg-[#f3f4f6] text-white">
         <Card className="p-6">
           <CardHeader>
             <CardTitle className="text-center text-lg font-bold">
@@ -38,7 +38,7 @@ export default async function RestaurantOrders({
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
+    <main className="flex min-h-screen flex-col items-center justify-center bg-[#f3f4f6] text-white p-10">
       <Card className="w-full max-w-4xl p-6 shadow-lg">
         <CardHeader>
           <CardTitle className="text-center text-xl font-bold">

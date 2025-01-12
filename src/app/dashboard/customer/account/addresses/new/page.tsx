@@ -1,5 +1,9 @@
 import { UserRole } from "~/lib/enums/roles";
 import { getSession } from "~/lib/session";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "~/components/ui/card";
+import { Button } from "~/components/ui/button";
+import { Input } from "~/components/ui/input";
+import { Label } from "~/components/ui/label";
 
 export default async function AddAddressPage() {
   const { user } = await getSession();
@@ -9,42 +13,43 @@ export default async function AddAddressPage() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-gray-700 to-gray-900 text-white">
-      <form
-        action="/api/addresses"
-        method="post"
-        className="flex flex-col gap-4 p-4 rounded-lg shadow-lg"
-      >
-        <label>
-          <span>Adres Başlığı</span>
-          <input
-            className="text-black"
-            type="text"
-            name="addressTitle"
-            required
-          />
-        </label>
-        <label>
-          <span>Adres Detayı</span>
-          <input
-            className="text-black"
-            type="text"
-            name="addressLine"
-            required
-          />
-        </label>
-        <label>
-          <span>Şehir</span>
-          <input className="text-black" type="text" name="city" required />
-        </label>
-
-        <button
-          type="submit"
-          className="bg-blue-500 p-2 rounded hover:bg-blue-700 mt-4"
-        >
-          Ekle
-        </button>
-      </form>
+    <main className="flex min-h-screen items-center justify-center bg-white">     
+      <Card className="w-full max-w-md shadow-lg">
+        <CardHeader>
+          <CardTitle className="text-center text-xl text-black">Yeni Adres Ekle</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form action="/api/addresses" method="post" className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="addressTitle">Adres Başlığı</Label>
+              <Input
+                id="addressTitle"
+                name="addressTitle"
+                placeholder="Ev Adresi"
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="addressLine">Adres Detayı</Label>
+              <Input
+                id="addressLine"
+                name="addressLine"
+                placeholder="Sokak, mahalle, bina numarası"
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="city">Şehir</Label>
+              <Input id="city" name="city" placeholder="İstanbul" required />
+            </div>
+            <CardFooter className="pt-6">
+              <Button type="submit" className="w-full">
+                Ekle
+              </Button>
+            </CardFooter>
+          </form>
+        </CardContent>
+      </Card>
     </main>
   );
 }

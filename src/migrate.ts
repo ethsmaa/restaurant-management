@@ -1,7 +1,9 @@
 import mysql from "mysql2/promise";
-import migrations001 from "./migrations/001_init";
 
-const allMigrations = [migrations001];
+import migrations001 from "./migrations/001_init";
+import migrations002 from "./migrations/002_views";
+
+const allMigrations = [migrations001, migrations002];
 
 async function getConnection() {
   try {

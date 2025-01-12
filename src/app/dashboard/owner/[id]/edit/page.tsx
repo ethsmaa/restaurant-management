@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-import type { Restaurant } from "~/lib/types/restaurant"; // Restaurant tipini içeri aktar
+import type { Restaurant } from "~/lib/types/restaurant"; // Import Restaurant type
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
@@ -25,7 +25,7 @@ export default function EditRestaurantPage() {
 
   useEffect(() => {
     if (!restaurantId) {
-      setErrorMessage("Geçersiz restoran ID'si");
+      setErrorMessage("Invalid restaurant ID");
       setLoading(false);
       return;
     }
@@ -43,7 +43,7 @@ export default function EditRestaurantPage() {
         setLoading(false);
       } catch (error) {
         console.error(error);
-        setErrorMessage("Restoran bilgileri alınamadı.");
+        setErrorMessage("Failed to fetch restaurant information.");
         setLoading(false);
       }
     };
@@ -76,15 +76,15 @@ export default function EditRestaurantPage() {
         throw new Error("Failed to update restaurant");
       }
 
-      setSuccessMessage("Restoran bilgileri başarıyla güncellendi.");
+      setSuccessMessage("Restaurant information updated successfully.");
     } catch (error) {
       console.error("Error updating restaurant:", error);
-      setErrorMessage("Restoran bilgileri güncellenirken hata oluştu.");
+      setErrorMessage("An error occurred while updating restaurant information.");
     }
   };
 
   const handleDelete = async () => {
-    if (confirm("Bu restoranı silmek istediğinize emin misiniz?")) {
+    if (confirm("Are you sure you want to delete this restaurant?")) {
       setSuccessMessage(null);
       setErrorMessage(null);
 
@@ -97,25 +97,25 @@ export default function EditRestaurantPage() {
           throw new Error("Failed to delete restaurant");
         }
 
-        setSuccessMessage("Restoran başarıyla silindi.");
+        setSuccessMessage("Restaurant deleted successfully.");
         router.push("/dashboard/owner");
       } catch (error) {
         console.error("Error deleting restaurant:", error);
-        setErrorMessage("Restoran silinirken hata oluştu.");
+        setErrorMessage("An error occurred while deleting the restaurant.");
       }
     }
   };
 
   if (loading) {
-    return <p className="mt-10 text-center">Yükleniyor...</p>;
+    return <p className="mt-10 text-center">Loading...</p>;
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-gradient-to-b from-[#c0bbc6] to-[#15162c] text-white">
+    <main className="flex min-h-screen items-center justify-center bg-[#f3f4f6] text-white">
       <Card className="w-full max-w-md p-6 shadow-lg">
         <CardHeader>
           <CardTitle className="text-center text-lg font-bold">
-            Restoran Bilgilerini Güncelle
+            Update Restaurant Information
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -131,7 +131,7 @@ export default function EditRestaurantPage() {
           )}
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <Label htmlFor="name">Restoran Adı</Label>
+              <Label htmlFor="name">Restaurant Name</Label>
               <Input
                 id="name"
                 name="name"
@@ -142,7 +142,7 @@ export default function EditRestaurantPage() {
               />
             </div>
             <div>
-              <Label htmlFor="address">Adres</Label>
+              <Label htmlFor="address">Address</Label>
               <Input
                 id="address"
                 name="address"
@@ -153,7 +153,7 @@ export default function EditRestaurantPage() {
               />
             </div>
             <div>
-              <Label htmlFor="phone">Telefon</Label>
+              <Label htmlFor="phone">Phone</Label>
               <Input
                 id="phone"
                 name="phone"
@@ -164,7 +164,7 @@ export default function EditRestaurantPage() {
               />
             </div>
             <Button type="submit" className="w-full">
-              Güncelle
+              Update
             </Button>
           </form>
           <Button
@@ -172,10 +172,10 @@ export default function EditRestaurantPage() {
             onClick={handleDelete}
             className="mt-4 w-full"
           >
-            Restoranı Sil
+            Delete Restaurant
           </Button>
           <a href={`/dashboard/owner/${restaurantId}`}>
-            <Button className="mt-4 w-full">Geri Dön</Button>
+            <Button className="mt-4 w-full">Back</Button>
           </a>
         </CardContent>
       </Card>

@@ -15,7 +15,7 @@ export default async function CustomerRestaurantPage({ params }: RestaurantPageP
   const restaurantID = Number(params.restaurantID);
 
   if (isNaN(restaurantID)) {
-    throw new Error("Geçersiz restoran ID'si");
+    throw new Error("Invalid restaurant ID");
   }
 
   const restaurant: Restaurant | null = await fetchRestaurantById(restaurantID);
@@ -28,8 +28,8 @@ export default async function CustomerRestaurantPage({ params }: RestaurantPageP
 
   return (
     <div className="flex flex-col items-start bg-gray-50 min-h-screen p-14">
-      {/* Restoran Bilgileri */}
-      <header className="w-full bg-white  rounded-lg shadow  text-black border py-6">
+      {/* Restaurant Information */}
+      <header className="w-full bg-white rounded-lg shadow text-black border py-6">
         <div className="max-w-4xl mx-auto flex flex-col items-center">
           <h1 className="text-3xl font-bold mb-2">{restaurant.name}</h1>
           <div className="flex items-center space-x-2">
@@ -40,13 +40,13 @@ export default async function CustomerRestaurantPage({ params }: RestaurantPageP
         </div>
       </header>
 
-      {/* Menü Başlığı */}
+      {/* Menu Title */}
       <div className="max-w-4xl w-full mt-6">
-        <h2 className="text-2xl font-semibold text-gray-800 mb-4">Menü</h2>
+        <h2 className="text-2xl font-semibold text-gray-800 mb-4">Menu</h2>
 
-        {/* Menü Öğeleri */}
+        {/* Menu Items */}
         {menuItems.length === 0 ? (
-          <p className="text-gray-600">Bu restoran için henüz menü öğesi eklenmemiş.</p>
+          <p className="text-gray-600">No menu items have been added for this restaurant yet.</p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {menuItems.map((item) => (
@@ -54,18 +54,6 @@ export default async function CustomerRestaurantPage({ params }: RestaurantPageP
             ))}
           </div>
         )}
-      </div>
-
-      {/* Sepet Butonu */}
-      <div className="fixed bottom-6 right-6">
-        <Link href="/basket">
-          <Button
-            size="lg"
-            className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg rounded-full px-6 py-3"
-          >
-            Sepetim
-          </Button>
-        </Link>
       </div>
     </div>
   );

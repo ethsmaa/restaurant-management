@@ -15,7 +15,7 @@ export async function fetchMenuItems(restaurantId: number): Promise<MenuItem[]> 
   
     try {
       const [results] = await db.query<(MenuItem & RowDataPacket)[]>(
-        "SELECT item_id, restaurant_id, name, description, price, category, image_url FROM Items WHERE restaurant_id = ?",
+        "SELECT item_id, restaurant_id, name, description, price, category FROM Items WHERE restaurant_id = ?",
         [restaurantId],
       );
   
@@ -43,7 +43,7 @@ export async function addMenuItem(
 
   try {
     await db.query(
-      "INSERT INTO Items (restaurant_id, name, description, price, category, image_url) VALUES (?, ?, ?, ?, ?, ?)",
+      "INSERT INTO Items (restaurant_id, name, description, price, category) VALUES (?, ?, ?, ?, ?)",
       [restaurantId, name, description, price, category, imageUrl],
     );
   } catch (error) {
@@ -101,7 +101,7 @@ export async function fetchMenuItem(itemId: number): Promise<MenuItem | null> {
 
   try {
     const [results] = await db.query<(MenuItem & RowDataPacket)[]>(
-      "SELECT item_id, restaurant_id, name, description, price, category, image_url FROM Items WHERE item_id = ?",
+      "SELECT item_id, restaurant_id, name, description, price, category FROM Items WHERE item_id = ?",
       [itemId],
     );
 
