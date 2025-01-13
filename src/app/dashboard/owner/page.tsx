@@ -49,11 +49,13 @@ export default async function OwnerDashboard() {
         )}
 
         <div className="mt-8">
-          <Link href="/dashboard/owner/add">
-            <Button className="w-full sm:w-auto" variant="default">
-              Add New Restaurant
-            </Button>
-          </Link>
+          {restaurants.length !== 0 && (
+            <Link href="/dashboard/owner/add">
+              <Button className="w-full sm:w-auto" variant="default">
+                Add New Restaurant
+              </Button>
+            </Link>
+          )}
         </div>
 
         <div className="mt-4">

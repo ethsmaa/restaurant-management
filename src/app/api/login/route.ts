@@ -1,7 +1,6 @@
-import { getIronSession } from "iron-session";
-import { cookies } from "next/headers";
+
 import { getConnection } from "~/lib/database";
-import  { type Session, sessionOptions } from "~/lib/session";
+import  { getSession } from "~/lib/session";
 import type { RowDataPacket } from "mysql2";
 
 import { UserRole } from "~/lib/enums/roles";
@@ -25,10 +24,7 @@ export async function POST(request: Request) {
     const dbUser = rows[0]!;
 
     // Kullanıcıyı session'a kaydet
-    const session = await getIronSession<Session>(
-      await cookies(),
-      sessionOptions
-    );
+    const session = await getSession();
 
     session.user = {
       id: dbUser.user_id,

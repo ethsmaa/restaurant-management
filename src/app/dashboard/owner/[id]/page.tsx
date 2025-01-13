@@ -91,7 +91,7 @@ export default async function RestaurantDetails({
       <div className="mt-8 flex flex-wrap justify-center gap-4 border-b p-4">
         <Link href={`/dashboard/owner/${restaurant.restaurant_id}/addItem`}>
           <Button variant="default" className="px-4 py-2 text-sm">
-            Add a New Dish to Your Menu
+            Add a New Item to Your Menu
           </Button>
         </Link>
 
