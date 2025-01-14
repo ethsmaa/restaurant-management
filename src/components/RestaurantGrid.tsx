@@ -71,7 +71,7 @@ export default function RestaurantGrid({ initialRestaurants }: { initialRestaura
             <CardContent>
               <p className="text-sm text-gray-600">{restaurant.address}</p>
               <a href={`/${restaurant.restaurant_id}`}>
-                <Button className="mt-4 w-full" variant="outline">
+                <Button className="mt-4 w-full" variant="default">
                   View Details
                 </Button>
               </a>

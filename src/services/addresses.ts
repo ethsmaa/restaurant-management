@@ -10,7 +10,7 @@ interface Address {
 }
 
 /**
- * Kullanıcının adreslerini getirir.
+ * Kullanıcının adreslerini getirir
  */
 export async function fetchAddresses(): Promise<Address[]> {
   const session = await getSession();
@@ -25,7 +25,7 @@ export async function fetchAddresses(): Promise<Address[]> {
 }
 
 /**
- * Yeni bir adres ekler.
+ * Yeni bir adres ekler 
  */
 export async function addAddress(
   userId: number,

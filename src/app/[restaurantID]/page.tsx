@@ -24,6 +24,11 @@ export default async function CustomerRestaurantPage({ params }: RestaurantPageP
     notFound();
   }
 
+  const formattedPhone = restaurant.phone.replace(
+    /(\d{3})(\d{3})(\d{4})/,
+    "($1) $2-$3"
+  );
+
   const menuItems: MenuItem[] = await fetchMenuItems(restaurantID);
 
   return (
@@ -35,7 +40,7 @@ export default async function CustomerRestaurantPage({ params }: RestaurantPageP
           <div className="flex items-center space-x-2">
             <p className="text-lg font-thin mb-1">{restaurant.address}</p>
             <span>|</span>
-            <p className="text-lg font-thin mb-1">+(90) {restaurant.phone}</p>
+            <p className="text-lg font-thin mb-1">+(90) {formattedPhone}</p>
           </div>
         </div>
       </header>

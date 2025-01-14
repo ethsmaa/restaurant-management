@@ -70,17 +70,17 @@ export async function PATCH(request: Request) {
       { status: 400 }
     );
   }
-
+ 
   const db = await getConnection();
 
   try {
-    // Tüm adreslerde `is_default` alanını false yap
+    // all other addresses are not default
     await db.query(
       "UPDATE Addresses SET is_default = false WHERE user_id = ?",
       [session.user.id]
     );
 
-    // Seçilen adresi varsayılan yap
+    // only the selected address is default
     await db.query(
       "UPDATE Addresses SET is_default = true WHERE address_id = ? AND user_id = ?",
       [addressId, session.user.id]

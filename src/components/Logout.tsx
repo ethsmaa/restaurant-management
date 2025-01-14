@@ -14,7 +14,7 @@ export const Logout = () => {
       window.location.href = "/"; // Geri başa dön
     } catch (error) {
       console.error("Logout failed:", error);
-      alert("Çıw bir hata oluştu.");
+      alert("Hata olustu");
     }
   };
 

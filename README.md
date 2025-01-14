@@ -12,7 +12,7 @@
 - uygulamayi baslat
     `yarn dev`
 
-> Not: Bir nedenden dolayi db in icine edersen bu komutla sifirlayabilirsin.
+> Not: Bir nedenden dolayi db i bozarsan bu komutla sifirlayabilirsin.
     ```
     docker compose down -v && docker compose up -d
     ``` 

@@ -57,7 +57,7 @@ export default function RegisterPage() {
         <input type="hidden" name="role" value={selectedRole} />
 
         {error === "email_exists" && (
-          <p className="text-buttonColor">This email is already registered. Please try another email.</p>
+          <p className="text-red-600">This email is already registered. Please try another email.</p>
         )}
         {error === "unknown_error" && (
           <p className="text-buttonColor">An unknown error occurred. Please try again.</p>

@@ -20,7 +20,7 @@ export const useSession = () => {
 
   useEffect(() => {
     void fetchSession();
-  }, []); // useEffect kullanmanin sebebi: sayfa yenilendiginde tekrar tekrar session bilgilerini cekmemek icin
+  }, []); // useEffect kullanmamizin sebebi: sayfa yenilendiginde tekrar tekrar session bilgilerini cekmemek icin
 
   return { session, loading, isLogged: session.user !== null };
 };

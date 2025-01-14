@@ -38,6 +38,11 @@ export default async function RestaurantDetails({
   // Fetch menu items for the restaurant
   const menuItems: MenuItem[] = await fetchMenuItems(restaurantId);
 
+  const formattedPhone = restaurant.phone.replace(
+    /(\d{3})(\d{3})(\d{4})/,
+    "($1) $2-$3"
+  );
+
   return (
     <div className="p-14">
       <Card className="mb-8">
@@ -49,7 +54,7 @@ export default async function RestaurantDetails({
         <CardContent className="flex justify-between items-center">
           <div>     
             <p className="text-gray-600">Address: {restaurant.address}</p>
-            <p className="text-gray-600">Phone: {restaurant.phone}</p>
+            <p className="text-gray-600">Phone: +90 {formattedPhone}</p>
           </div>
 
 
